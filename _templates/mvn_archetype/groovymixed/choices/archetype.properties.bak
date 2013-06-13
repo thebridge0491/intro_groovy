@@ -1,0 +1,28 @@
+# mvn archetype:create-from-project [-Darchetype.groupId=org.sandbox -Darchetype.artifactId=groovymixed-archetype -Darchetype.version=0.1.0] [-Darchetype.languages=groovy,java -Darchetype.filteredExtentions=groovy,java,..] -Darchetype.properties=archetype.properties
+# cd target/generated-sources/archetype
+
+# cp pom.xml src/main/resources/ ; mvn install
+
+parent=intro_groovy
+parentdescription=Parent description for multi-package project mixed Groovy.
+name=groovymixed
+description=A Maven archetype template for mixed Groovy project.
+
+repohost=bitbucket.org
+repoacct=imrepoid
+author=imcomputer
+email=imemail-codelab@yahoo.com
+date=2013-06-13
+
+#archetype.groupId=org.sandbox
+#archetype.artifactId=groovymixed-archetype
+#archetype.version=0.1.0
+archetype.languages=groovy,java
+archetype.filteredExtensions=groovy,java,i,rst,md,adoc,txt,xml,bak,mk
+
+# example usage of archetype:
+#   cd <path> ; mvn archetype:generate [-DinteractiveMode=false]
+#     -DarchetypeCatalog=local -DarchetypeGroupId=org.sandbox
+#     -DarchetypeArtifactId=groovymixed-archetype -Ddate=2012-08-20
+#     -DgroupId=org.sandbox -Dparent=intro_groovy -Dname=util -Dversion=0.1.0
+#     [-DtestFrwk=spock -DffiLib=none -Dexecutable=no]
