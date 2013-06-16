@@ -38,6 +38,11 @@ class Main {
     /** Brief description.
      * @param args - array of command-line arguments */
     static void main(String[] args) {
+		def chooser = [
+			'simple': 'simple',
+			'advanced': 'advanced'
+		]
+		def usage_str = sprintf("  Choose module to run.\n  Available modules: %s", chooser.keySet())
 		def optsMap = new HashMap<String, String>() {
 			static final long serialVersionUID = 660L
 		}
@@ -46,6 +51,11 @@ class Main {
         
         //System.env['PATH_PFX'] = 'src/main/resources/explore'
         System.properties['path_pfx'] = 'src/main/resources/explore'
+        if (!chooser.get(optsMap['mod'])) {
+			System.err.printf("Invalid module: %s\n%s\n", optsMap['mod'], 
+				usage_str)
+			System.exit(1)
+		}
         def runmod = new GroovyScriptEngine('src/main/groovy/org/sandbox/intro_groovy/scriptexplore').with {
 			loadScriptByName(optsMap['mod'].capitalize() + '.groovy')
 		}
