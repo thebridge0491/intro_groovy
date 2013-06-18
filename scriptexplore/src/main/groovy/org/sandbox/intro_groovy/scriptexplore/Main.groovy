@@ -40,7 +40,10 @@ class Main {
     static void main(String[] args) {
 		def chooser = [
 			'simple': 'simple',
-			'advanced': 'advanced'
+			'advanced': 'advanced',
+			'mymd5': 'mymd5',
+			'ggrep': 'ggrep',
+			'ddiff': 'ddiff'
 		]
 		def usage_str = sprintf("  Choose module to run.\n  Available modules: %s", chooser.keySet())
 		def optsMap = new HashMap<String, String>() {
