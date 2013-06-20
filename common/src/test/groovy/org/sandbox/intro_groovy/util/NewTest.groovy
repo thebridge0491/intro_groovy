@@ -6,12 +6,6 @@ class NewTest extends Specification {
 	//private def tolerance = 2.0f * Float.MIN_VALUE
 	private def epsilon = 1.0e-7f
 	
-    Boolean in_epsilon(Float a, Float b, Float tolerance = 0.001f) {
-		def delta = Math.abs(tolerance)
-		//return (a - delta) <= b && (a + delta) >= b
-		return !((a + delta) < b) && !((b + delta) < a)
-	}
-	
     void setupSpec() throws Exception {
     	System.err.println("###setup TestCase###")
     }
@@ -53,7 +47,7 @@ class NewTest extends Specification {
 	def "dblMethod spec"() {
 		expect:
 		100.001f == 100.001f
-		in_epsilon(100.001f, 100.001f, epsilon)
+		Library.in_epsilon(100.001f, 100.001f, epsilon)
 	}
 	
 	def "strMethod spec"() {

@@ -3,7 +3,6 @@ package org.sandbox.intro_groovy.intro
 @org.junit.runner.RunWith(org.junit.runners.Suite.class)
 //@org.junit.runner.RunWith(org.spockframework.runtime.Sputnik.class)
 @org.junit.runners.Suite.SuiteClasses([NewTest.class])
-//@org.junit.runners.Suite.SuiteClasses([NewTest.class, ClassicTest.class])
 class Ts_Main {
     static void main(String[] args) {
         if (1 > args.length)

@@ -89,7 +89,7 @@
     <exclude org = 'org.testng' module = 'testng'/>
     <!--<exclude org = 'org.spockframework' module = 'spock-core'/>-->
     <exclude org = 'org.slf4j' module = 'log4j-over-slf4j'/>
-    <!--<exclude org = 'ch.qos.logback' module = 'logback-classic'/>-->
+    <exclude org = 'ch.qos.logback' module = 'logback-classic'/>
     <exclude org = 'org.ini4j' module = 'ini4j'/>
     <exclude org = 'net.java.dev.jna' module = 'jna'/>
     <exclude org = 'javax.json' module = 'javax.json-api'/>
