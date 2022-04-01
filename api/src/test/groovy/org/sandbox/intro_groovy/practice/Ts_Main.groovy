@@ -1,21 +1,16 @@
 package org.sandbox.intro_groovy.practice
 
-@org.junit.runner.RunWith(org.junit.runners.Suite.class)
-//@org.junit.runner.RunWith(org.spockframework.runtime.Sputnik.class)
-@org.junit.runners.Suite.SuiteClasses([ClassicTest.class, SequenceopsTest.class])
+@org.junit.platform.suite.api.Suite
+@org.junit.platform.suite.api.IncludeClassNamePatterns([/^.*Test$/,
+  /^Test.*$/, /^.*Prop$/, /^Prop.*$/])
+@org.junit.platform.suite.api.SelectClasses([ClassicTest.class, SequenceopsTest.class])
 class Ts_Main {
     static void main(String[] args) {
         if (1 > args.length)
-            org.junit.runner.JUnitCore.main(Ts_Main.class.getName())
-        else {
-            for (s in args)
-                try {
-                    Class<?> cls = Class.forName(s)
-                } catch (ClassNotFoundException exc) {
-                    System.err.println exc  //exc.printStackTrace()
-                    System.exit 1
-                }
-            org.junit.runner.JUnitCore.main args 
-        }
+            org.junit.platform.console.ConsoleLauncher.main("-c", 
+                ClassicTest.class.getName(), "-c",
+                SequenceopsTest.class.getName())
+        else 
+            org.junit.platform.console.ConsoleLauncher.main(args)
     }
 }

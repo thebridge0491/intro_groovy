@@ -38,3 +38,5 @@ target/*
 .jip*/*
 javalib/*
 .gradle/*
+
+**/resources/explore/*/
