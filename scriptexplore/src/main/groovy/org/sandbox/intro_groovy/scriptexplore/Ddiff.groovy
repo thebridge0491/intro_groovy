@@ -122,7 +122,8 @@ final class Ddiff {
 		//	similar name but different  : < file >
 		//	similar name and same       : > file <
 		// demo: $ script [-ds12] <path>/dataA <path>/dataB
-		for (line in create_diff_list(paths, opts_hash))
+		for (line in create_diff_list(1 > paths.size() ? ["data_diff/dataA",
+				"data_diff/dataB"].toArray(new String[0]) : paths, opts_hash))
 			println line
 	}
 }
