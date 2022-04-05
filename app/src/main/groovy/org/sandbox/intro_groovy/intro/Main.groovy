@@ -30,6 +30,48 @@ class Main {
 	private static final def rootLogger = LoggerFactory.getLogger(
 		Main.class.getName())
 	
+	private static Map<String, Object> deserializeStr(String dataStr,
+			String fmt) {
+		def blankCfg = ["fmt": fmt]
+	
+		if (0 != dataStr.length()) {
+			if (fmt in ['yaml', 'json']) {
+				def yaml = new org.yaml.snakeyaml.Yaml()
+				blankCfg << yaml.load(dataStr)
+			} else if ('toml' == fmt) {
+				def toml = new com.moandjiezana.toml.Toml()
+				blankCfg << toml.read(dataStr).toMap()
+			} /*else if ('json' == fmt) {
+				def (jsonobj, rdr) = [null, null]
+				rdr = javax.json.Json.createReader(new java.io.StringReader(
+                    dataStr))
+                jsonobj = rdr.readObject()
+                
+                def jsonmap = [:]
+                for (entryX in jsonobj.entrySet()) {
+                	if (jsonobj.getClass() != entryX.getValue().getClass())
+                		jsonmap.put(entryX.getKey(), entryX.getValue())
+                	else {
+                		def jsonsub = entryX.getValue()
+                		def jsonsubmap = [:]
+                		for (entrySub in jsonsub.entrySet()) {
+                			jsonsubmap.put(entrySub.getKey(), 
+                				entrySub.getValue())
+                		}
+                		jsonmap.put(entryX.getKey(), jsonsubmap)
+                	}
+                }
+                rdr.close()
+                blankCfg << jsonmap
+				
+				//def rdr = new groovy.json.JsonSlurper()
+				// //blankCfg = rdr.parseText(dataStr)
+				//blankCfg << rdr.parseText(dataStr)
+			}*/
+		}
+		return blankCfg
+	}
+	
 	private static void run_intro(String progname, String rsrc_path,
 			Map<String, String> opts) {
 	    def timeIn_mSecs = System.currentTimeMillis()
@@ -182,42 +224,53 @@ class Main {
 	    def rsrc_path = System.env.getOrDefault("RSRC_PATH",
 			System.props.getOrDefault("rsrcPath", "src/main/resources"))
         
-        def (iniStrm, jsonStrm, yamlStrm) = [null, null, null]
+        def ini_cfg = new org.ini4j.Ini()
         try {
-			iniStrm = new java.io.FileInputStream(rsrc_path + "/prac.conf")
-			//jsonStrm = new java.io.FileInputStream(rsrc_path + "/prac.json")
-			//yamlStrm = new java.io.FileInputStream(rsrc_path + "/prac.yaml")
+			ini_cfg.load (new java.io.FileInputStream(rsrc_path + "/prac.conf"))
 		} catch (java.io.IOException exc0) {
 			printf "(exc: %s) Bad env var RSRC_PATH: %s\n", exc0, rsrc_path
-			
-			iniStrm = Main.class.getResourceAsStream "/prac.conf"
-			//jsonStrm = Main.class.getResourceAsStream "/prac.json"
-			//yamlStrm = Main.class.getResourceAsStream "/prac.yaml"
+			try {
+				ini_cfg.load (Main.class.getResourceAsStream "/prac.conf")
+			} catch (java.io.IOException exc1) {
+				exc0.printStackTrace()
+                exc1.printStackTrace()
+                System.exit 1
+			}
 		}
-        
-        def ini_cfg = new org.ini4j.Ini()
-        
-        //def (jsonobj, rdr) = [null,null]
-        try {
-        	ini_cfg.load iniStrm
-        	//rdr = new groovy.json.JsonSlurper()
-        	//jsonobj = rdr.parse(new java.io.InputStreamReader(jsonStrm))
-        	//rdr = javax.json.Json.createReader jsonStrm
-			//jsonobj = rdr.readObject()
-        } catch (java.io.IOException exc) {
-            exc.printStackTrace()
-            System.exit 1
-        } /*finally {
-			rdr.close()
-		}*/
 		
-		//def yaml = new org.yaml.snakeyaml.Yaml()
-		//def yamlmap = yaml.load yamlStrm
+		
+        /*def (json_cfg, yaml_cfg, toml_cfg) = [null, null, null]
+        try {
+			json_cfg = deserializeStr(new String(new java.io.FileInputStream(
+                rsrc_path + "/prac.json").readAllBytes()), "json")
+            toml_cfg = deserializeStr(new String(new java.io.FileInputStream(
+                rsrc_path + "/prac.toml").readAllBytes()), "toml")
+            yaml_cfg = deserializeStr(new String(new java.io.FileInputStream(
+                rsrc_path + "/prac.yaml").readAllBytes()), "yaml")
+		} catch (java.io.IOException exc0) {
+			printf "(exc: %s) Bad env var RSRC_PATH: %s\n", exc0, rsrc_path
+			try {
+				json_cfg = deserializeStr(new String(
+					Main.class.getResourceAsStream("/prac.json"
+					).readAllBytes()), "json")
+				toml_cfg = deserializeStr(new String(
+					Main.class.getResourceAsStream("/prac.toml"
+					).readAllBytes()), "toml")
+				yaml_cfg = deserializeStr(new String(
+					Main.class.getResourceAsStream("/prac.yaml"
+					).readAllBytes()), "yaml")
+			} catch (java.io.IOException exc1) {
+				exc0.printStackTrace()
+                exc1.printStackTrace()
+                //System.exit 1
+			}
+		}*/
         
     	def tup_arr = [
-			[ini_cfg, ini_cfg["default"]["domain"], ini_cfg["user1"]["name"]]//,
-			//[jsonobj, jsonobj["domain"], jsonobj["user1"]["name"]],
-			//[yamlmap, yamlmap["domain"], yamlmap["user1"]["name"]]
+			[ini_cfg, ini_cfg["default"]["domain"], ini_cfg["user1"]["name"]]/*,
+			[json_cfg, json_cfg["domain"], json_cfg["user1"]["name"]],
+			[toml_cfg, toml_cfg["domain"], toml_cfg["user1"]["name"]],
+			[yaml_cfg, yaml_cfg["domain"], yaml_cfg["user1"]["name"]]*/
 		]
 		
         //printf "ini4j config start section: %s\n",
