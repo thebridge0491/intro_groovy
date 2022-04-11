@@ -3,40 +3,40 @@
 #set( $symbol_escape = '\' )
 package ${package}
 
-import org.junit.Test
-import static org.junit.Assert.*
+import org.junit.jupiter.api.Test
+import static org.junit.jupiter.api.Assertions.*
 
 class NewTest {
 	//private def tolerance = 2.0f * Float.MIN_VALUE
 	private def epsilon = 1.0e-7f
-	
+
     NewTest() {
     }
-    
+
     Boolean in_epsilon(Float a, Float b, Float tolerance = 0.001f) {
 		def delta = Math.abs(tolerance)
 		//return (a - delta) <= b && (a + delta) >= b
 		return !((a + delta) < b) && !((b + delta) < a)
 	}
 
-    @org.junit.BeforeClass
+    @org.junit.jupiter.api.BeforeAll
     static void setUpClass() throws Exception {
     	System.err.println("${symbol_pound}${symbol_pound}${symbol_pound}setup TestCase${symbol_pound}${symbol_pound}${symbol_pound}")
     }
-    @org.junit.AfterClass
+    @org.junit.jupiter.api.AfterAll
     static void tearDownClass() throws Exception {
     	System.err.println("${symbol_pound}${symbol_pound}${symbol_pound}teardown TestCase${symbol_pound}${symbol_pound}${symbol_pound}")
     }
-    
-    @org.junit.Before
+
+    @org.junit.jupiter.api.BeforeEach
     void setUp() {
     	System.err.println("setup Test ...")
     }
-    @org.junit.After
+    @org.junit.jupiter.api.AfterEach
     void tearDown() {
     	System.err.println("... teardown Test")
     }
-	
+
     @Test
     void test_classExists() {
         try {
@@ -48,7 +48,7 @@ class NewTest {
                 java.util.Arrays.toString([Library.class.getName()] as String[])))
         }
     }
-    
+
 	@Test
     void test_method() { assertEquals(4, 2 * 2)
     }
@@ -60,17 +60,21 @@ class NewTest {
     @Test
     void test_strMethod() { assertEquals("Hello", "Hello")
     }
-    @Test(timeout = 1000L)
+    @org.junit.jupiter.api.Timeout(value = 1000000,
+      unit = java.util.concurrent.TimeUnit.MILLISECONDS)
+    @Test
     void test_timeoutMethod() { for (int i = 0; 1.0e6f > i; ++i);
     }
-    @org.junit.Ignore @Test
+    @org.junit.jupiter.api.Disabled @Test
     void test_ignoredMethod() { assertEquals(5, 2 * 2)
     }
     @Test //(expected = AssertionError.class)
     void test_failMethod() { fail()
     }
-    @Test(expected = IllegalArgumentException.class)
-    void test_exceptionMethod() {
-        throw new IllegalArgumentException()
+    @Test //(expected = IllegalArgumentException.class)
+    public void test_exceptionMethod() {
+        //throw new IllegalArgumentException();
+        assertThrows(IllegalArgumentException.class,
+          () -> { throw new IllegalArgumentException(); });
     }
 }

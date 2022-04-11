@@ -20,22 +20,27 @@ version control repository clone:
 
 
 #{if}("rake" == ${buildTool})
-cd <path> ; [sh] ./configure.sh [--prefix=$PREFIX] [--help]
+build example with rake:
+cd <path> ; [sh] ./configure.sh [--prefix=${symbol_dollar}PREFIX] [--help]
 rake main [check]
 rake publish
 #{elseif}("make" == ${buildTool})
-cd <path> ; [sh] ./configure.sh [--prefix=$PREFIX] [--help]
+build example with make:
+cd <path> ; [sh] ./configure.sh [--prefix=${symbol_dollar}PREFIX] [--help]
 make all [check]
 make publish
 #{elseif}("ant" == ${buildTool})
-cd <path> ; ant [-Djava.library.path=$PREFIX/lib] compile [test]
+build example with ant:
+cd <path> ; ant [-Djava.library.path=${symbol_dollar}PREFIX/lib] compile [test]
 ant publish
 #{elseif}("maven" == ${buildTool})
-cd <path> ; mvn [-Djava.library.path=$PREFIX/lib] compile [test]
-mvn install
+build example with maven wrapper:
+cd <path> ; ./mvnw [-Djava.library.path=${symbol_dollar}PREFIX/lib] compile [test]
+./mvnw install
 #{else}
-cd <path> ; gradle [-Djava.library.path=$PREFIX/lib] assemble [check]
-gradle install
+build example with gradle wrapper:
+cd <path> ; ./gradlew [-Djava.library.path=${symbol_dollar}PREFIX/lib] assemble [check]
+./gradlew install
 #{end}
 
 ${symbol_pound}${symbol_pound} Usage
@@ -46,7 +51,7 @@ ${symbol_pound}${symbol_pound} Usage
         // ${symbol_dollar}PKG_CONFIG --cflags --libs <ffi-lib>
         // java [-Djava.library.path=${symbol_dollar}PREFIX/lib] ...
         
-        import ${package}.Library
+        import ${package}.Library;
         ...
         Integer[] arr1 = [0, 1, 2], arr2 = [10, 20, 30]
         def nested_arr = Library.cartesian_prod(arr1, arr2)
