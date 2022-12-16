@@ -36,8 +36,10 @@ class Main {
 	
 		if (0 != dataStr.length()) {
 			if (fmt in ['yaml', 'json']) {
-				def yaml = new org.yaml.snakeyaml.Yaml()
-				blankCfg << yaml.load(dataStr)
+				def settings = org.snakeyaml.engine.v2.api.LoadSettings
+					.builder().build()
+				def yaml = new org.snakeyaml.engine.v2.api.Load(settings)
+				blankCfg << yaml.loadFromString(dataStr)
 			} else if ('toml' == fmt) {
 				def toml = new com.moandjiezana.toml.Toml()
 				blankCfg << toml.read(dataStr).toMap()
